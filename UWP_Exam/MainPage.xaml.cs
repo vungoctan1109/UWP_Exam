@@ -26,5 +26,41 @@ namespace UWP_Exam
         {
             this.InitializeComponent();
         }
+
+        private async void Button_Click(object sender, RoutedEventArgs e)
+        {
+            Contact contact = new Contact
+            {
+                Name = txtName.Text,
+                PhoneNumber = txtPhone.Text
+            };
+            DatabaseInitialize.Save(contact);
+            ContentDialog contentDialog = new ContentDialog
+            {
+                CloseButtonText = "Close"
+            };
+            contentDialog.Title = "Action success.";
+            contentDialog.Content = "Contact has been saved.";
+            await contentDialog.ShowAsync();
+        }
+
+        private async void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            Contact searchContact = DatabaseInitialize.GetContact(txtSearchName.Text, txtSearchPhone.Text);
+            if (searchContact == null)
+            {
+                searchText.Text = $"Your contact: Name {searchContact.Name}, Phone {searchContact.PhoneNumber}";
+            }
+            else
+            {
+                ContentDialog contentDialog = new ContentDialog
+                {
+                    CloseButtonText = "Close"
+                };
+                contentDialog.Title = "Action failed.";
+                contentDialog.Content = "Contact not found.";
+                await contentDialog.ShowAsync();
+            }
+        }
     }
 }
